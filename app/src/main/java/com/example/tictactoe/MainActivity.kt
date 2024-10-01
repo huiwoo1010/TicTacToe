@@ -2,15 +2,18 @@ package com.example.tictactoe
 
 import TicTacToeViewModel
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tictactoe.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TicTacToeViewModel by viewModels()
+    private lateinit var adapter: GridAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +34,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.board.observe(this, Observer { board ->
             updateBoardUI(board)
-            adapter.historyList = viewModel.getBoardStateHistory()
-            adapter.notifyDataSetChanged()
+            Log.d("MainActivity", "Board Updated: ${board.contentDeepToString()}")
+            //adapter.historyList = viewModel.getBoardStateHistory()
+            adapter.updateHistoryList(viewModel.getBoardStateHistory())
         })
 
         viewModel.currentPlayer.observe(this, Observer { currentPlayer ->

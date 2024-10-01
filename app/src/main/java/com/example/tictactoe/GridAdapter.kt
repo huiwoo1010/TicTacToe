@@ -1,10 +1,12 @@
 package com.example.tictactoe
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 class GridAdapter(
@@ -34,6 +36,8 @@ class GridAdapter(
     }
 
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
+        Log.d("GridAdapter", "Binding position: $position, History List Size: ${historyList.size}")
+
         val currentHistory = historyList[position]
         //var index = 0
         for (i in 0..2) {
@@ -49,7 +53,14 @@ class GridAdapter(
     }
 
     override fun getItemCount(): Int {
+        Log.d("GridAdapter", "Current history list size: ${historyList.size}")
         return historyList.size
+    }
+
+
+    fun updateHistoryList(newHistoryList: List<Array<IntArray>>) {
+        this.historyList = newHistoryList
+        notifyDataSetChanged() // 데이터 변경 사항 알림
     }
 
 }

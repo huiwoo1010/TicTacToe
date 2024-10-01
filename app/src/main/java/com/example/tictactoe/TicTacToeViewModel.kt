@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -100,6 +101,8 @@ class TicTacToeViewModel : ViewModel() {
         }
         boardHistory.add(boardCopy)
         playerHistory.add(_currentPlayer.value ?: 1)
+
+        Log.d("TicTacToe", "Board history updated: $boardHistory")
     }
 
 
