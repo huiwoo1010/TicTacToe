@@ -56,6 +56,8 @@ class TicTacToeViewModel : ViewModel() {
         _board.value = Array(3) { IntArray(3) { 0 } }
         _currentPlayer.value = 1
         _winner.value = null
+        boardHistory.clear()
+        playerHistory.clear()
     }
 
     // 승리 조건 확인 함수

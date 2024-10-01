@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 class GridAdapter(
     var historyList: List<Array<IntArray>>,
-    private val onUndoClickListener: (Int) -> Unit // 되돌아가기
+    private val onUndoClickListener: (Int) -> Unit,
+    var winner: String?
 ) : RecyclerView.Adapter<GridAdapter.GridViewHolder>() {
+
 
     class GridViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val buttons = arrayOf(
@@ -27,6 +29,7 @@ class GridAdapter(
             itemView.findViewById<Button>(R.id.button08)
         )
         val undoText: TextView = itemView.findViewById(R.id.undo_text)
+        val turnText: TextView = itemView.findViewById(R.id.turn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
@@ -38,8 +41,12 @@ class GridAdapter(
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
         Log.d("GridAdapter", "Binding position: $position, History List Size: ${historyList.size}")
 
+        holder.itemView.setOnClickListener {
+            onUndoClickListener(position)
+        }
+
         val currentHistory = historyList[position]
-        //var index = 0
+
         for (i in 0..2) {
             for (j in 0..2) {
                 val index = i * 3 + j
@@ -50,17 +57,15 @@ class GridAdapter(
                 }
             }
         }
+        holder.turnText.text = "${position+1}턴"
+        if (winner != null && position == historyList.size - 1) {
+            holder.undoText.text = winner
+        }
     }
 
     override fun getItemCount(): Int {
         Log.d("GridAdapter", "Current history list size: ${historyList.size}")
         return historyList.size
-    }
-
-
-    fun updateHistoryList(newHistoryList: List<Array<IntArray>>) {
-        this.historyList = newHistoryList
-        notifyDataSetChanged() // 데이터 변경 사항 알림
     }
 
 }

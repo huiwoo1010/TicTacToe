@@ -3,6 +3,7 @@ package com.example.tictactoe
 import TicTacToeViewModel
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -21,12 +22,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val adapter = GridAdapter(
+        adapter = GridAdapter(
             viewModel.getBoardStateHistory(),
             onUndoClickListener = { position ->
                 viewModel.undoToTurn(position)
                 updateBoardUI(viewModel.getBoardState())
-            }
+            },
+            winner = null
         )
 
         binding.drawerRecyclerView.adapter = adapter
@@ -35,8 +37,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.board.observe(this, Observer { board ->
             updateBoardUI(board)
             Log.d("MainActivity", "Board Updated: ${board.contentDeepToString()}")
-            //adapter.historyList = viewModel.getBoardStateHistory()
-            adapter.updateHistoryList(viewModel.getBoardStateHistory())
+            adapter.historyList = viewModel.getBoardStateHistory()
+            adapter.notifyDataSetChanged()
         })
 
         viewModel.currentPlayer.observe(this, Observer { currentPlayer ->
@@ -44,7 +46,8 @@ class MainActivity : AppCompatActivity() {
         })
         viewModel.winner.observe(this, Observer { winner ->
             if (winner != null) {
-                showWinnerMessage(winner)
+                val message = showWinnerMessage(winner)
+                adapter.winner = message
             }
         })
 
@@ -108,16 +111,17 @@ class MainActivity : AppCompatActivity() {
         binding.currentPlayerText.text = "현재 플레이어: ${if (currentPlayer == 1) "X" else "O"}"
     }
 
-    private fun showWinnerMessage(winner: Int?) {
+    private fun showWinnerMessage(winner: Int?): String? {
         val message = when (winner) {
             1 -> "X 승리!"
             2 -> "O 승리!"
             0 -> "무승부!"
-            else -> return
+            else -> return null
         }
         binding.currentPlayerText.text = message
         disableButtons() // 게임이 끝나면 버튼 비활성화
         binding.resetButton.text = "한판 더"
+        return message
     }
 
     private fun disableButtons() {

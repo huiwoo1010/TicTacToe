@@ -8,13 +8,25 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
         android:id="@+id/turn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1턴"
         android:textSize="18sp"
         android:padding="8dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/start"
+        app:layout_constraintStart_toStartOf="@id/gridBoard"
+        app:layout_constraintBottom_toTopOf="@id/gridBoard"/>
 
     <TextView
         android:id="@+id/undo_text"
@@ -23,7 +35,9 @@
         android:text="되돌아가기"
         android:textSize="18sp"
         android:padding="8dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/gridBoard"
+        app:layout_constraintEnd_toEndOf="@id/gridBoard" />
 
     <GridLayout
         android:id="@+id/gridBoard"
