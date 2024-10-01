@@ -19,20 +19,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val adapter = GridAdapter(
-            viewModel.getBoardStateAsStringList(),
+            viewModel.getBoardStateHistory(),
             onUndoClickListener = { position ->
                 viewModel.undoToTurn(position)
                 updateBoardUI(viewModel.getBoardState())
             }
         )
+
         binding.drawerRecyclerView.adapter = adapter
         binding.drawerRecyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModel.board.observe(this, Observer { board ->
-                updateBoardUI(board)
+            updateBoardUI(board)
+            adapter.historyList = viewModel.getBoardStateHistory()
+            adapter.notifyDataSetChanged()
         })
+
         viewModel.currentPlayer.observe(this, Observer { currentPlayer ->
-                updateCurrentPlayerUI(currentPlayer)
+            updateCurrentPlayerUI(currentPlayer)
         })
         viewModel.winner.observe(this, Observer { winner ->
             if (winner != null) {
@@ -73,8 +77,6 @@ class MainActivity : AppCompatActivity() {
         binding.drawerButton.setOnClickListener {
             binding.root.openDrawer(binding.drawer)
         }
-
-
     }
 
     // 보드 UI를 업데이트하는 함수

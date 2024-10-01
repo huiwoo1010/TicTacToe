@@ -17,7 +17,7 @@ class TicTacToeViewModel : ViewModel() {
     val winner: LiveData<Int?> get() = _winner
 
     private val boardHistory = mutableListOf<Array<IntArray>>()
-    private val playerHistory = mutableListOf<Int>() // To track which player's turn it was
+    private val playerHistory = mutableListOf<Int>()
 
     init {
         resetBoard()
@@ -31,6 +31,8 @@ class TicTacToeViewModel : ViewModel() {
                 it[row][col] = _currentPlayer.value ?: 1
                 _board.value = it // 보드 상태 업데이트
 
+                saveCurrentBoardState() // 보드 상태 저장
+                
                 // 승리 조건 확인
                 if (checkWinner()) {
                     _winner.value = _currentPlayer.value // 현재 플레이어가 승리
@@ -88,26 +90,24 @@ class TicTacToeViewModel : ViewModel() {
     }
     
     // 보드 상태를 복사하는 함수
-    private fun saveBoardState(currentBoard: Array<IntArray>) {
-        val boardCopy = Array(3) { currentBoard[it].clone() }
+    private fun saveCurrentBoardState() {
+        val currentBoard = _board.value ?: return
+        val boardCopy = Array(3) { IntArray(3) { 0 } }
+        for (i in 0..2) {
+            for (j in 0..2) {
+                boardCopy[i][j] = currentBoard[i][j]
+            }
+        }
         boardHistory.add(boardCopy)
         playerHistory.add(_currentPlayer.value ?: 1)
     }
+
 
     fun getBoardState(): Array<IntArray> {
         return _board.value ?: Array(3) { IntArray(3) { 0 } }
     }
 
-    fun getBoardStateAsStringList(): List<List<String>> {
-        val currentBoard = getBoardState() // getBoardState()가 Array<IntArray>를 반환한다고 가정
-        return currentBoard.map { row ->
-            row.map { cell ->
-                when (cell) {
-                    1 -> "X"
-                    2 -> "O"
-                    else -> ""
-                }
-            }
-        }
+    fun getBoardStateHistory(): List<Array<IntArray>> {
+        return boardHistory
     }
 }

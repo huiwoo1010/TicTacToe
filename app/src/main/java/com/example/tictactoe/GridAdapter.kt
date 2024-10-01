@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class GridAdapter(
-    private val historyList: List<List<String>>,
+    var historyList: List<Array<IntArray>>,
     private val onUndoClickListener: (Int) -> Unit // 되돌아가기
 ) : RecyclerView.Adapter<GridAdapter.GridViewHolder>() {
 
@@ -35,17 +35,21 @@ class GridAdapter(
 
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
         val currentHistory = historyList[position]
-
-        for (i in currentHistory.indices) {
-            holder.buttons[i].text = currentHistory[i]
-        }
-
-        holder.undoText.setOnClickListener {
-            onUndoClickListener(position)
+        //var index = 0
+        for (i in 0..2) {
+            for (j in 0..2) {
+                val index = i * 3 + j
+                holder.buttons[index].text = when (currentHistory[i][j]) {
+                    1 -> "X"
+                    2 -> "O"
+                    else -> ""
+                }
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return historyList.size
     }
+
 }
