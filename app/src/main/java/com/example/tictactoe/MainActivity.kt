@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tictactoe.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +17,16 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val adapter = GridAdapter(
+            viewModel.getBoardStateAsStringList(),
+            onUndoClickListener = { position ->
+                viewModel.undoToTurn(position)
+                updateBoardUI(viewModel.getBoardState())
+            }
+        )
+        binding.drawerRecyclerView.adapter = adapter
+        binding.drawerRecyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModel.board.observe(this, Observer { board ->
                 updateBoardUI(board)
@@ -57,6 +68,13 @@ class MainActivity : AppCompatActivity() {
                 enableButtons() // 버튼 활성화
             }
         }
+
+        // 서랍 버튼 클릭 리스너
+        binding.drawerButton.setOnClickListener {
+            binding.root.openDrawer(binding.drawer)
+        }
+
+
     }
 
     // 보드 UI를 업데이트하는 함수
