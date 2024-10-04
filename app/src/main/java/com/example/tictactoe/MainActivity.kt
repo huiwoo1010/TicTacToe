@@ -2,14 +2,19 @@ package com.example.tictactoe
 
 import TicTacToeViewModel
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tictactoe.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: TicTacToeViewModel by viewModels()
+    private lateinit var adapter: GridAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,15 +22,32 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        adapter = GridAdapter(
+            viewModel.getBoardStateHistory(),
+            onUndoClickListener = { position ->
+                viewModel.undoToTurn(position)
+                updateBoardUI(viewModel.getBoardState())
+            },
+            winner = null
+        )
+
+        binding.drawerRecyclerView.adapter = adapter
+        binding.drawerRecyclerView.layoutManager = LinearLayoutManager(this)
+
         viewModel.board.observe(this, Observer { board ->
-                updateBoardUI(board)
+            updateBoardUI(board)
+            Log.d("MainActivity", "Board Updated: ${board.contentDeepToString()}")
+            adapter.historyList = viewModel.getBoardStateHistory()
+            adapter.notifyDataSetChanged()
         })
+
         viewModel.currentPlayer.observe(this, Observer { currentPlayer ->
-                updateCurrentPlayerUI(currentPlayer)
+            updateCurrentPlayerUI(currentPlayer)
         })
         viewModel.winner.observe(this, Observer { winner ->
             if (winner != null) {
-                showWinnerMessage(winner)
+                val message = showWinnerMessage(winner)
+                adapter.winner = message
             }
         })
 
@@ -57,6 +79,11 @@ class MainActivity : AppCompatActivity() {
                 enableButtons() // 버튼 활성화
             }
         }
+
+        // 서랍 버튼 클릭 리스너
+        binding.drawerButton.setOnClickListener {
+            binding.root.openDrawer(binding.drawer)
+        }
     }
 
     // 보드 UI를 업데이트하는 함수
@@ -84,16 +111,17 @@ class MainActivity : AppCompatActivity() {
         binding.currentPlayerText.text = "현재 플레이어: ${if (currentPlayer == 1) "X" else "O"}"
     }
 
-    private fun showWinnerMessage(winner: Int?) {
+    private fun showWinnerMessage(winner: Int?): String? {
         val message = when (winner) {
             1 -> "X 승리!"
             2 -> "O 승리!"
             0 -> "무승부!"
-            else -> return
+            else -> return null
         }
         binding.currentPlayerText.text = message
         disableButtons() // 게임이 끝나면 버튼 비활성화
         binding.resetButton.text = "한판 더"
+        return message
     }
 
     private fun disableButtons() {
