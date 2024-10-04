@@ -23,10 +23,26 @@ class GridAdapter(
             itemView.findViewById<Button>(R.id.button02),
             itemView.findViewById<Button>(R.id.button03),
             itemView.findViewById<Button>(R.id.button04),
-            itemView.findViewById<Button>(R.id.button05),
-            itemView.findViewById<Button>(R.id.button06),
-            itemView.findViewById<Button>(R.id.button07),
-            itemView.findViewById<Button>(R.id.button08)
+            itemView.findViewById<Button>(R.id.button10),
+            itemView.findViewById<Button>(R.id.button11),
+            itemView.findViewById<Button>(R.id.button12),
+            itemView.findViewById<Button>(R.id.button13),
+            itemView.findViewById<Button>(R.id.button14),
+            itemView.findViewById<Button>(R.id.button20),
+            itemView.findViewById<Button>(R.id.button21),
+            itemView.findViewById<Button>(R.id.button22),
+            itemView.findViewById<Button>(R.id.button23),
+            itemView.findViewById<Button>(R.id.button24),
+            itemView.findViewById<Button>(R.id.button30),
+            itemView.findViewById<Button>(R.id.button31),
+            itemView.findViewById<Button>(R.id.button32),
+            itemView.findViewById<Button>(R.id.button33),
+            itemView.findViewById<Button>(R.id.button34),
+            itemView.findViewById<Button>(R.id.button40),
+            itemView.findViewById<Button>(R.id.button41),
+            itemView.findViewById<Button>(R.id.button42),
+            itemView.findViewById<Button>(R.id.button43),
+            itemView.findViewById<Button>(R.id.button44),
         )
         val undoText: TextView = itemView.findViewById(R.id.undo_text)
         val turnText: TextView = itemView.findViewById(R.id.turn)
@@ -47,9 +63,9 @@ class GridAdapter(
 
         val currentHistory = historyList[position]
 
-        for (i in 0..2) {
-            for (j in 0..2) {
-                val index = i * 3 + j
+        for (i in 0..4) {
+            for (j in 0..4) {
+                val index = i * 5 + j
                 holder.buttons[index].text = when (currentHistory[i][j]) {
                     1 -> "X"
                     2 -> "O"

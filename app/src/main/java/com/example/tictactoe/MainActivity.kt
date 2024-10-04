@@ -53,13 +53,15 @@ class MainActivity : AppCompatActivity() {
 
         // 각 버튼에 클릭 리스너 설정
         val buttons = listOf(
-                listOf(binding.button00, binding.button01, binding.button02),
-                listOf(binding.button10, binding.button11, binding.button12),
-                listOf(binding.button20, binding.button21, binding.button22)
+                listOf(binding.button00, binding.button01, binding.button02, binding.button03, binding.button04),
+                listOf(binding.button10, binding.button11, binding.button12, binding.button13, binding.button14),
+                listOf(binding.button20, binding.button21, binding.button22, binding.button23, binding.button24),
+                listOf(binding.button30, binding.button31, binding.button32, binding.button33, binding.button34),
+                listOf(binding.button40, binding.button41, binding.button42, binding.button43, binding.button44),
         )
 
-        for (i in 0..2) {
-            for (j in 0..2) {
+        for (i in 0..4) {
+            for (j in 0..4) {
                 buttons[i][j].setOnClickListener {
                     viewModel.makeMove(i, j)
                 }
@@ -89,13 +91,15 @@ class MainActivity : AppCompatActivity() {
     // 보드 UI를 업데이트하는 함수
     private fun updateBoardUI(board: Array<IntArray>) {
         val buttons = listOf(
-                listOf(binding.button00, binding.button01, binding.button02),
-                listOf(binding.button10, binding.button11, binding.button12),
-                listOf(binding.button20, binding.button21, binding.button22)
+            listOf(binding.button00, binding.button01, binding.button02, binding.button03, binding.button04),
+            listOf(binding.button10, binding.button11, binding.button12, binding.button13, binding.button14),
+            listOf(binding.button20, binding.button21, binding.button22, binding.button23, binding.button24),
+            listOf(binding.button30, binding.button31, binding.button32, binding.button33, binding.button34),
+            listOf(binding.button40, binding.button41, binding.button42, binding.button43, binding.button44),
         )
 
-        for (i in 0..2) {
-            for (j in 0..2) {
+        for (i in 0..4) {
+            for (j in 0..4) {
                 buttons[i][j].text = when (board[i][j]) {
                     1 -> "X"
                     2 -> "O"
@@ -126,13 +130,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun disableButtons() {
         val buttons = listOf(
-            listOf(binding.button00, binding.button01, binding.button02),
-            listOf(binding.button10, binding.button11, binding.button12),
-            listOf(binding.button20, binding.button21, binding.button22)
+            listOf(binding.button00, binding.button01, binding.button02, binding.button03, binding.button04),
+            listOf(binding.button10, binding.button11, binding.button12, binding.button13, binding.button14),
+            listOf(binding.button20, binding.button21, binding.button22, binding.button23, binding.button24),
+            listOf(binding.button30, binding.button31, binding.button32, binding.button33, binding.button34),
+            listOf(binding.button40, binding.button41, binding.button42, binding.button43, binding.button44),
         )
 
-        for (i in 0..2) {
-            for (j in 0..2) {
+        for (i in 0..4) {
+            for (j in 0..4) {
                 buttons[i][j].isEnabled = false
             }
         }
@@ -140,13 +146,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun enableButtons() {
         val buttons = listOf(
-            listOf(binding.button00, binding.button01, binding.button02),
-            listOf(binding.button10, binding.button11, binding.button12),
-            listOf(binding.button20, binding.button21, binding.button22)
+            listOf(binding.button00, binding.button01, binding.button02, binding.button03, binding.button04),
+            listOf(binding.button10, binding.button11, binding.button12, binding.button13, binding.button14),
+            listOf(binding.button20, binding.button21, binding.button22, binding.button23, binding.button24),
+            listOf(binding.button30, binding.button31, binding.button32, binding.button33, binding.button34),
+            listOf(binding.button40, binding.button41, binding.button42, binding.button43, binding.button44),
         )
 
-        for (i in 0..2) {
-            for (j in 0..2) {
+        for (i in 0..4) {
+            for (j in 0..4) {
                 buttons[i][j].isEnabled = true
             }
         }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 class TicTacToeViewModel : ViewModel() {
     // 게임 보드 상태를 저장하는 LiveData
-    private val _board = MutableLiveData<Array<IntArray>>(Array(3) { IntArray(3) { 0 } })
+    private val _board = MutableLiveData<Array<IntArray>>(Array(5) { IntArray(5) { 0 } })
     val board: LiveData<Array<IntArray>> get() = _board
 
     // 현재 플레이어 상태 (1 = X, 2 = O)
@@ -53,7 +53,7 @@ class TicTacToeViewModel : ViewModel() {
 
     // 게임을 리셋하는 함수
     fun resetBoard() {
-        _board.value = Array(3) { IntArray(3) { 0 } }
+        _board.value = Array(5) { IntArray(5) { 0 } }
         _currentPlayer.value = 1
         _winner.value = null
         boardHistory.clear()
@@ -62,17 +62,30 @@ class TicTacToeViewModel : ViewModel() {
 
     // 승리 조건 확인 함수
     private fun checkWinner(): Boolean {
-        val b = _board.value!!
-        // 가로, 세로 확인
-        for (i in 0..2) {
-            if (b[i][0] != 0 && b[i][0] == b[i][1] && b[i][1] == b[i][2]) return true
-            if (b[0][i] != 0 && b[0][i] == b[1][i] && b[1][i] == b[2][i]) return true
+        val b = _board.value!! // 5x5 보드
+        // 가로 확인
+        for (i in 0..4) {
+            if (b[i][0] != 0 && b[i][0] == b[i][1] && b[i][1] == b[i][2] && b[i][2] == b[i][3] && b[i][3] == b[i][4]) {
+                return true
+            }
+        }
+        // 세로 확인
+        for (i in 0..4) {
+            if (b[0][i] != 0 && b[0][i] == b[1][i] && b[1][i] == b[2][i] && b[2][i] == b[3][i] && b[3][i] == b[4][i]) {
+                return true
+            }
         }
         // 대각선 확인
-        if (b[0][0] != 0 && b[0][0] == b[1][1] && b[1][1] == b[2][2]) return true
-        if (b[0][2] != 0 && b[0][2] == b[1][1] && b[1][1] == b[2][0]) return true
+        if (b[0][0] != 0 && b[0][0] == b[1][1] && b[1][1] == b[2][2] && b[2][2] == b[3][3] && b[3][3] == b[4][4]) {
+            return true
+        }
+        if (b[0][4] != 0 && b[0][4] == b[1][3] && b[1][3] == b[2][2] && b[2][2] == b[3][1] && b[3][1] == b[4][0]) {
+            return true
+        }
+
         return false
     }
+
 
     // 보드가 가득 찼는지 확인하는 함수
     private fun isBoardFull(): Boolean {
@@ -95,9 +108,9 @@ class TicTacToeViewModel : ViewModel() {
     // 보드 상태를 복사하는 함수
     private fun saveCurrentBoardState() {
         val currentBoard = _board.value ?: return
-        val boardCopy = Array(3) { IntArray(3) { 0 } }
-        for (i in 0..2) {
-            for (j in 0..2) {
+        val boardCopy = Array(5) { IntArray(5) { 0 } }
+        for (i in 0..4) {
+            for (j in 0..4) {
                 boardCopy[i][j] = currentBoard[i][j]
             }
         }
@@ -109,7 +122,7 @@ class TicTacToeViewModel : ViewModel() {
 
 
     fun getBoardState(): Array<IntArray> {
-        return _board.value ?: Array(3) { IntArray(3) { 0 } }
+        return _board.value ?: Array(5) { IntArray(5) { 0 } }
     }
 
     fun getBoardStateHistory(): List<Array<IntArray>> {
